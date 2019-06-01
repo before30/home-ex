@@ -1,6 +1,3 @@
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-    }
-}
 rootProject.name = 'exercise'
+include 'springboot2-logging'
+include 'springboot2-logging-kt'
