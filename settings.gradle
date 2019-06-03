@@ -2,4 +2,5 @@ rootProject.name = 'exercise'
 include 'springboot2-logging'
 include 'springboot2-logging-kt'
 include 'springboot2-junit5'
+include 'springboot2-junit5-kt'
 
