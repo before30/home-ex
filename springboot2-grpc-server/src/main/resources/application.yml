@@ -1,0 +1,14 @@
+grpc:
+  port: 6556
+  enableReflection: true
+management:
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: "*"
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  jmx:
+    enabled: false

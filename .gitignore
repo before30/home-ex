@@ -1,6 +1,7 @@
 HELP.md
 .gradle
 */build/**
+*/protoGen/**
 !gradle/wrapper/gradle-wrapper.jar
 
 ### STS ###

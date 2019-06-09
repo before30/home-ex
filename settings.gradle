@@ -8,4 +8,6 @@ include 'springboot2-jedis'
 include 'springboot2-redis-lettuce'
 include 'springboot2-redis-redisson'
 include 'springboot2-circuitbreaker-resilience4j'
+include 'springboot2-grpc-server'
+include 'springboot2-grpc-client'
 
