@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: resilience4j-demo
+
+#resilience4j.circuitbreaker:
+#  backends:
+#    backendA:
+#      ringBufferSizeInClosedState: 5
+#      ringBufferSizeInHalfOpenState: 3
+#      waitInterval: 5000
+#      failureRateThreshold: 50
+#      eventConsumerBufferSize: 10
+#    backendB:
+#      ringBufferSizeInClosedState: 10
+#      ringBufferSizeInHalfOpenState: 3
+#      waitInterval: 5000
+#      failureRateThreshold: 50
+#      eventConsumerBufferSize: 10

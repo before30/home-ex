@@ -4,4 +4,8 @@ include 'springboot2-logging-kt'
 include 'springboot2-junit5'
 include 'springboot2-junit5-kt'
 include 'springboot2-testcontainers'
+include 'springboot2-jedis'
+include 'springboot2-redis-lettuce'
+include 'springboot2-redis-redisson'
+include 'springboot2-circuitbreaker-resilience4j'
 
