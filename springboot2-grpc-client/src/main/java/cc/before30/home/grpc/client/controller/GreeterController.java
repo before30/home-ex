@@ -33,13 +33,23 @@ public class GreeterController {
         return greeterService.greet(RandomStringUtils.randomAlphabetic(10));
     }
 
-    @GetMapping("/c10")
-    public String c10() throws ExecutionException, InterruptedException {
+    @GetMapping("/c10-1")
+    public String c10_1() throws ExecutionException, InterruptedException {
         List<String> names = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             names.add(RandomStringUtils.randomAlphabetic(10));
         }
         greeterService.greets(names);
+        return "done";
+    }
+
+    @GetMapping("/c10-2")
+    public String c10_2() throws ExecutionException, InterruptedException {
+        List<String> names = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            names.add(RandomStringUtils.randomAlphabetic(10));
+        }
+        greeterService.greets2(names);
         return "done";
     }
 }

@@ -46,10 +46,48 @@ public class GreeterService {
         return reply;
     }
 
+    public void greets2(List<String> names) {
+        List<ListenableFuture<GreeterOuterClass.HelloReply>> futures = new ArrayList<>();
+        for (String name : names) {
+            ListenableFuture<GreeterOuterClass.HelloReply> future = Futures.withTimeout(greetAsFuture(name),1, TimeUnit.SECONDS, scheduledExecutor);
+            futures.add(future);
+            Futures.addCallback(future, new FutureCallback<GreeterOuterClass.HelloReply>() {
+                @Override
+                public void onSuccess(@NullableDecl GreeterOuterClass.HelloReply result) {
+                    log.info("Success {}", result.getMessage());
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    log.info("Failure {}", t.getMessage());
+                }
+            }, executor);
+        }
+
+        ListenableFuture<List<GreeterOuterClass.HelloReply>> listListenableFuture = Futures.successfulAsList(futures);
+        Futures.addCallback(listListenableFuture,
+                new FutureCallback<List<GreeterOuterClass.HelloReply>>() {
+                    @Override
+                    public void onSuccess(@NullableDecl List<GreeterOuterClass.HelloReply> result) {
+                        for (GreeterOuterClass.HelloReply reply : result) {
+                            if (reply == null) {
+                                log.info("reply is null");
+                            } else {
+                                log.info("reply is {}", reply.getMessage());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        log.info("Failure {}", t.getMessage());
+                    }
+                }, executor);
+    }
+
     public void greets(List<String> names) throws ExecutionException, InterruptedException {
         List<ListenableFuture<GreeterOuterClass.HelloReply>> futures = new ArrayList<>();
         for (String name : names) {
-//            futures.add(Futures.withTimeout(greetAsFuture(name), 1, TimeUnit.SECONDS, scheduledExecutor));
             ListenableFuture<GreeterOuterClass.HelloReply> replyFuture = Futures.withTimeout(greetAsFuture(name), 1, TimeUnit.SECONDS, scheduledExecutor);
             Futures.addCallback(replyFuture,
                 new FutureCallback<GreeterOuterClass.HelloReply>() {
@@ -69,27 +107,6 @@ public class GreeterService {
                     }
                 }, executor);
         }
-
-//        ListenableFuture<List<GreeterOuterClass.HelloReply>> listListenableFuture = Futures.successfulAsList(futures);
-//        Futures.addCallback(listListenableFuture,
-//                new FutureCallback<List<GreeterOuterClass.HelloReply>>() {
-//                    @Override
-//                    public void onSuccess(@NullableDecl List<GreeterOuterClass.HelloReply> result) {
-//                        for (GreeterOuterClass.HelloReply reply : result) {
-//                            if (reply == null) {
-//                                log.info("reply is null");
-//                            } else {
-//                                log.info("reply is {}", reply.getMessage());
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Throwable t) {
-//                        log.info("Failure {}", t.getMessage());
-//                    }
-//                }, executor);
-
     }
 
     public String greet(String name) throws ExecutionException, InterruptedException {
