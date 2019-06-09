@@ -1,5 +1,6 @@
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'com.google.protobuf'
 
 dependencies {
     // Spring
@@ -7,11 +8,59 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
     compile 'io.github.lognet:grpc-spring-boot-starter:3.3.0'
 }
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/protoGen'
+        }
+    }
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.5.1'
+    }
+
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:1.21.0"
+        }
+    }
+
+    generateProtoTasks {
+        ofSourceSet('main').each { task ->
+            task.builtins {
+                java{
+                    outputSubDir = 'protoGen'
+                }
+            }
+            task.plugins {
+                grpc {
+                    outputSubDir = 'protoGen'
+                }
+            }
+        }
+    }
+
+    generatedFilesBaseDir = "$projectDir/src/"
+}
+
+task cleanProtoGen{
+    doFirst{
+        delete("$projectDir/src/main/protoGen")
+    }
+}
+
+clean.dependsOn cleanProtoGen
 
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
     }
 }
+

@@ -6,6 +6,9 @@ import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import org.lognet.springboot.grpc.GRpcService;
 
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
 /**
  * GreetingService
  *
@@ -22,6 +25,11 @@ public class GreetingService extends GreeterGrpc.GreeterImplBase {
         String message = "Hello " + request.getName();
         final GreeterOuterClass.HelloReply.Builder replyBuilder = GreeterOuterClass.HelloReply.newBuilder().setMessage(message);
 
+        Random rand = new Random();
+        try {
+            TimeUnit.SECONDS.sleep(rand.nextInt(2));
+        } catch (InterruptedException e) {
+        }
         responseObserver.onNext(replyBuilder.build());
         responseObserver.onCompleted();
 

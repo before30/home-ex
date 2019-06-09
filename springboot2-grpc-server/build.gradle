@@ -4,10 +4,12 @@ apply plugin: 'com.google.protobuf'
 
 dependencies {
     // Spring
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+//    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+//    implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
     compile 'io.github.lognet:grpc-spring-boot-starter:3.3.0'
 }
 
