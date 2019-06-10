@@ -51,17 +51,6 @@ public class GreeterService {
         for (String name : names) {
             ListenableFuture<GreeterOuterClass.HelloReply> future = Futures.withTimeout(greetAsFuture(name),1, TimeUnit.SECONDS, scheduledExecutor);
             futures.add(future);
-            Futures.addCallback(future, new FutureCallback<GreeterOuterClass.HelloReply>() {
-                @Override
-                public void onSuccess(@NullableDecl GreeterOuterClass.HelloReply result) {
-                    log.info("Success {}", result.getMessage());
-                }
-
-                @Override
-                public void onFailure(Throwable t) {
-                    log.info("Failure {}", t.getMessage());
-                }
-            }, executor);
         }
 
         ListenableFuture<List<GreeterOuterClass.HelloReply>> listListenableFuture = Futures.successfulAsList(futures);

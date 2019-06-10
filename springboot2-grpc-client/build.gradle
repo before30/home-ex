@@ -11,6 +11,14 @@ dependencies {
 
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
     compile 'io.github.lognet:grpc-spring-boot-starter:3.3.0'
+    compile group: 'io.github.resilience4j', name: 'resilience4j-core', version: '0.15.0'
+    compile group: 'io.github.resilience4j', name: 'resilience4j-spring-boot2', version: '0.15.0'
+    compile group: 'io.github.resilience4j', name: 'resilience4j-timelimiter', version: '0.15.0'
+    compile group: 'io.github.resilience4j', name: 'resilience4j-bulkhead', version: '0.15.0'
+    compile group: 'io.github.resilience4j', name: 'resilience4j-circuitbreaker', version: '0.15.0'
+    compile group: 'org.aspectj', name: 'aspectjrt', version: '1.9.4'
+
+
 }
 
 sourceSets {

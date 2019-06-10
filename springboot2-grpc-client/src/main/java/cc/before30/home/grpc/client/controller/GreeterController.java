@@ -1,6 +1,7 @@
 package cc.before30.home.grpc.client.controller;
 
 import cc.before30.home.grpc.client.service.GreeterService;
+import cc.before30.home.grpc.client.service.GreeterWithCircuitBreakerService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +24,12 @@ import java.util.concurrent.ExecutionException;
 public class GreeterController {
 
     private final GreeterService greeterService;
+    private final GreeterWithCircuitBreakerService greeterWithCircuitBreakerService;
 
-    public GreeterController(GreeterService greeterService) {
+    public GreeterController(GreeterService greeterService,
+                             GreeterWithCircuitBreakerService greeterWithCircuitBreakerService) {
         this.greeterService = greeterService;
+        this.greeterWithCircuitBreakerService = greeterWithCircuitBreakerService;
     }
 
     @GetMapping("/c1")
@@ -50,6 +54,17 @@ public class GreeterController {
             names.add(RandomStringUtils.randomAlphabetic(10));
         }
         greeterService.greets2(names);
+        return "done";
+    }
+
+    @GetMapping("/c2")
+    public String c2() throws ExecutionException, InterruptedException {
+        List<String> names = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            names.add(RandomStringUtils.randomAlphanumeric(10));
+        }
+
+        greeterWithCircuitBreakerService.greets(names);
         return "done";
     }
 }

@@ -27,7 +27,7 @@ public class GreetingService extends GreeterGrpc.GreeterImplBase {
 
         Random rand = new Random();
         try {
-            TimeUnit.SECONDS.sleep(rand.nextInt(2));
+            TimeUnit.SECONDS.sleep(rand.nextInt(6)+5);
         } catch (InterruptedException e) {
         }
         responseObserver.onNext(replyBuilder.build());
