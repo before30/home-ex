@@ -7,6 +7,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import io.github.resilience4j.bulkhead.Bulkhead;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.decorators.Decorators;
 import io.github.resilience4j.timelimiter.TimeLimiter;
 import io.grpc.ManagedChannel;
 import lombok.extern.slf4j.Slf4j;
@@ -62,15 +63,14 @@ public class GreeterWithCircuitBreakerService {
     }
 
     public ListenableFuture<GreeterOuterClass.HelloReply> decorateGreet(String name) {
-        Function<String, ListenableFuture<GreeterOuterClass.HelloReply>> func = CircuitBreaker.decorateFunction(circuitBreaker, n -> greetAsFuture(n));
-        Function<String, ListenableFuture<GreeterOuterClass.HelloReply>> func2 = Bulkhead.decorateFunction(bulkhead, func);
-
-        return func2.apply(name);
+        return Decorators.ofSupplier(() -> greetAsFuture(name))
+                .withCircuitBreaker(circuitBreaker)
+                .withBulkhead(bulkhead)
+                .get();
     }
 
 
     public void greets(List<String> names) throws ExecutionException, InterruptedException {
-        List<ListenableFuture<GreeterOuterClass.HelloReply>> futures = new ArrayList<>();
         for (String name : names) {
             ListenableFuture<GreeterOuterClass.HelloReply> replyFuture = Futures.withTimeout(decorateGreet(name), 10, TimeUnit.SECONDS, scheduledExecutor);
             Futures.addCallback(replyFuture,

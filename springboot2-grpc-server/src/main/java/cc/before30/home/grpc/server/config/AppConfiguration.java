@@ -1,9 +1,10 @@
 package cc.before30.home.grpc.server.config;
 
-import cc.before30.home.grpc.server.service.CalculatorService;
 import cc.before30.home.grpc.server.service.GreetingService;
+import org.apache.solr.util.SolrCLI;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.solr.core.SolrTemplate;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
@@ -24,13 +25,8 @@ public class AppConfiguration {
     }
 
     @Bean
-    public GreetingService greeterService() {
-        return new GreetingService();
-    }
-
-    @Bean
-    public CalculatorService calculatorService() {
-        return new CalculatorService();
+    public GreetingService greeterService(SolrTemplate solrTemplate) {
+        return new GreetingService(solrTemplate);
     }
 
 }

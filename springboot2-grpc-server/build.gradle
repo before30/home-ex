@@ -4,13 +4,23 @@ apply plugin: 'com.google.protobuf'
 
 dependencies {
     // Spring
-//    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-//    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     compileOnly 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
-    compile 'io.github.lognet:grpc-spring-boot-starter:3.3.0'
+    implementation 'io.github.lognet:grpc-spring-boot-starter:3.3.0'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-solr'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Solr를 위한 디펜던시
+//    implementation group: 'org.springframework.data', name: 'spring-data-solr', version: '2.1.22.RELEASE'
+    implementation('org.springframework.boot:spring-boot-starter-data-solr')
+    implementation group: 'org.apache.solr', name: 'solr-core', version: '5.5.5'
+    implementation group: 'org.apache.solr', name: 'solr-solrj', version: '5.5.5'
+    implementation group: 'io.dropwizard.metrics', name: 'metrics-core', version: '3.1.0'
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
+
+
 }
 
 sourceSets {
@@ -63,4 +73,3 @@ dependencyManagement {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
     }
 }
-
