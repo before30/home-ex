@@ -30,25 +30,24 @@ import java.util.function.Function;
 @Slf4j
 @Component
 public class GreeterWithCircuitBreakerService {
-    private final ExecutorService executor;
-    private final ScheduledExecutorService scheduledExecutor;
+    private final Executor executor;
     private final CircuitBreaker circuitBreaker;
     private final ManagedChannel channel;
     private final Bulkhead bulkhead;
     private final TimeLimiter timeLimiter;
+    private final ScheduledExecutorService scheduledExecutorService;
 
-    public GreeterWithCircuitBreakerService(@Qualifier("executor") ExecutorService executor,
-                                            @Qualifier("scheduledExecutor") ScheduledExecutorService scheduledExecutor,
+    public GreeterWithCircuitBreakerService(Executor executor,
                                             CircuitBreaker circuitBreaker,
                                             ManagedChannel channel,
                                             Bulkhead bulkhead,
                                             TimeLimiter timeLimiter) {
         this.executor = executor;
-        this.scheduledExecutor = scheduledExecutor;
         this.circuitBreaker = circuitBreaker;
         this.channel = channel;
         this.bulkhead = bulkhead;
         this.timeLimiter = timeLimiter;
+        this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     }
 
     public ListenableFuture<GreeterOuterClass.HelloReply> greetAsFuture(String name) {
@@ -72,7 +71,7 @@ public class GreeterWithCircuitBreakerService {
 
     public void greets(List<String> names) throws ExecutionException, InterruptedException {
         for (String name : names) {
-            ListenableFuture<GreeterOuterClass.HelloReply> replyFuture = Futures.withTimeout(decorateGreet(name), 10, TimeUnit.SECONDS, scheduledExecutor);
+            ListenableFuture<GreeterOuterClass.HelloReply> replyFuture = Futures.withTimeout(decorateGreet(name), 10, TimeUnit.SECONDS, scheduledExecutorService);
             Futures.addCallback(replyFuture,
                     new FutureCallback<GreeterOuterClass.HelloReply>() {
                         @Override

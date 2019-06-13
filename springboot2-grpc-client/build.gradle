@@ -17,7 +17,9 @@ dependencies {
 //    compile group: 'io.github.resilience4j', name: 'resilience4j-spring-boot2', version: '0.15.0'
 //    compile group: 'io.github.resilience4j', name: 'resilience4j-timelimiter', version: '0.15.0'
     compile group: 'org.aspectj', name: 'aspectjrt', version: '1.9.4'
-
+// Sleuth, Zipkin
+    implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+    implementation group: 'io.zipkin.brave', name: 'brave-instrumentation-grpc', version: '5.6.3'
 
 }
 

@@ -9,9 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.*;
 
 /**
  * SearchService
@@ -24,13 +22,12 @@ import java.util.concurrent.ScheduledExecutorService;
 @Component
 public class SearchService {
 
-    private final ExecutorService executor;
+    private final Executor executor;
     private final ScheduledExecutorService scheduledExecutor;
 
-    public SearchService(@Qualifier("executor") ExecutorService executor,
-                          @Qualifier("scheduledExecutor") ScheduledExecutorService scheduledExecutor) {
+    public SearchService(Executor executor) {
         this.executor = executor;
-        this.scheduledExecutor = scheduledExecutor;
+        this.scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
     }
 
     public GreeterOuterClass.SearchResponse search(String query) throws ExecutionException, InterruptedException {

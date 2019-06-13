@@ -27,13 +27,12 @@ import java.util.concurrent.*;
 @Component
 public class GreeterService {
 
-    private final ExecutorService executor;
-    private final ScheduledExecutorService scheduledExecutor;
+    private final Executor executor;
+    private final ScheduledExecutorService scheduledExecutorService;
 
-    public GreeterService(@Qualifier("executor") ExecutorService executor,
-                          @Qualifier("scheduledExecutor") ScheduledExecutorService scheduledExecutor) {
+    public GreeterService(Executor executor) {
         this.executor = executor;
-        this.scheduledExecutor = scheduledExecutor;
+        this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     }
 
     public ListenableFuture<GreeterOuterClass.HelloReply> greetAsFuture(String name) {
@@ -49,7 +48,7 @@ public class GreeterService {
     public void greets2(List<String> names) {
         List<ListenableFuture<GreeterOuterClass.HelloReply>> futures = new ArrayList<>();
         for (String name : names) {
-            ListenableFuture<GreeterOuterClass.HelloReply> future = Futures.withTimeout(greetAsFuture(name),1, TimeUnit.SECONDS, scheduledExecutor);
+            ListenableFuture<GreeterOuterClass.HelloReply> future = Futures.withTimeout(greetAsFuture(name),1, TimeUnit.SECONDS, scheduledExecutorService);
             futures.add(future);
         }
 
@@ -77,7 +76,7 @@ public class GreeterService {
     public void greets(List<String> names) throws ExecutionException, InterruptedException {
         List<ListenableFuture<GreeterOuterClass.HelloReply>> futures = new ArrayList<>();
         for (String name : names) {
-            ListenableFuture<GreeterOuterClass.HelloReply> replyFuture = Futures.withTimeout(greetAsFuture(name), 1, TimeUnit.SECONDS, scheduledExecutor);
+            ListenableFuture<GreeterOuterClass.HelloReply> replyFuture = Futures.withTimeout(greetAsFuture(name), 1, TimeUnit.SECONDS, scheduledExecutorService);
             Futures.addCallback(replyFuture,
                 new FutureCallback<GreeterOuterClass.HelloReply>() {
                     @Override

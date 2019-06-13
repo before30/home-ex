@@ -1,5 +1,8 @@
 package cc.before30.home.grpc.server.service;
 
+import brave.Tracing;
+import brave.grpc.GrpcTracing;
+import brave.internal.Nullable;
 import cc.before30.home.grpc.proto.GreeterGrpc;
 import cc.before30.home.grpc.proto.GreeterOuterClass;
 import cc.before30.home.grpc.server.domain.ProductItem;
@@ -25,7 +28,7 @@ import java.util.stream.Collectors;
  */
 
 @Slf4j
-@GRpcService(interceptors = { LogInterceptor.class })
+@GRpcService(interceptors = { LogInterceptor.class, LogInterceptor2.class })
 public class GreetingService extends GreeterGrpc.GreeterImplBase {
 
     private final SolrTemplate solrTemplate;
